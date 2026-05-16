@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# boutique-app
 
-## Getting Started
+Storefront **Next.js 14** pour Kernel — réécriture de l'ancien storefront React.  
+Chaque boutique est accessible via son slug : `/[slug]`
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Stack
+
+- **Next.js 14** App Router + SSR
+- **TypeScript** + **Tailwind CSS**
+- Backend séparé : **NestJS**
+
+---
+
+## Structure
+
+```
+app/
+  layout.tsx
+  page.tsx                        # Redirect → kernelsshop.com
+  [slug]/
+    layout.tsx                    # Fetch store + Navigation + Footer
+    page.tsx                      # Homepage boutique
+    loading.tsx
+    not-found.tsx
+    produits/
+      page.tsx                    # Catalogue
+      loading.tsx
+      [productId]/
+        page.tsx                  # Fiche produit
+        loading.tsx
+
+components/
+  shared/
+    ProductCard.tsx
+  themes/
+    minimal/                      # Thème actuel
+      Navigation.tsx
+      Footer.tsx
+      HomePage.tsx
+      CataloguePage.tsx
+      ProductPage.tsx
+
+lib/
+  api.ts                          # Tous les appels backend
+
+types/
+  store.ts
+  product.ts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm install -D tailwind-scrollbar-hide
+```
 
-## Learn More
+`.env.local` :
 
-To learn more about Next.js, take a look at the following resources:
+```
+NEXT_PUBLIC_API_URL=http://localhost:3000/api
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run dev   # → http://localhost:3001
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Points d'attention
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**`status` case-sensitive** — si le backend renvoie `"ACTIVE"` au lieu de `"active"`, normaliser dans `lib/api.ts` :
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```ts
+if (data?.status) data.status = data.status.toLowerCase();
+```
+
+**Params asynchrones** — Next.js 15 : toujours `const { slug } = await params`.
