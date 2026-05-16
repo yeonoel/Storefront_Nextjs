@@ -12,8 +12,8 @@ Kernel permet à des vendeurs de créer une boutique en ligne en quelques minute
 
 Le flux acheteur est adapté au marché ivoirien :
 
-- Pas de panier ni de paiement en ligne
-- Commande directement via **WhatsApp** avec message pré-rempli
+- Pas de panier ni de
+- Pas paiement en ligne pour le moment
 - Paiement à la livraison
 - Interface mobile-first
 
@@ -135,92 +135,7 @@ L'app tourne sur `http://localhost:3001` (3000 étant occupé par NestJS).
 
 ## Données attendues depuis le backend
 
-### Store
-
-Le endpoint `GET /stores/:slug` doit retourner :
-
-```json
-{
-  "data": {
-    "id": "uuid",
-    "name": "Yeo Sneakers",
-    "slug": "yeo-sneakers",
-    "status": "active",
-    "isDeleted": false,
-    "whatsappNumber": "+2250700000000",
-    "logoUrl": "https://...",
-    "bannerUrl": "https://...",
-    "primaryColor": "#FF6B35",
-    "tagline": "Les meilleures sneakers d'Abidjan",
-    "description": "...",
-    "owner": { "id": "uuid", "phone": "...", "role": "vendor" },
-    "createdAt": "...",
-    "updatedAt": "..."
-  }
-}
-```
-
-**Champs obligatoires** : `name`, `slug`, `status`, `isDeleted`
-
-**Champs optionnels avec fallback** :
-
-- `logoUrl` → initiales du nom en cercle coloré
-- `bannerUrl` → dégradé depuis `primaryColor`
-- `primaryColor` → `#1A1A1A`
-- `tagline` → `"Bienvenue dans notre boutique"`
-- `whatsappNumber` → bouton WhatsApp masqué
-
-### Products
-
-Le endpoint `GET /stores/:slug/products` accepte ces query params :
-
-| Param      | Type    | Description                      |
-| ---------- | ------- | -------------------------------- |
-| `page`     | number  | Pagination                       |
-| `limit`    | number  | Nombre de résultats              |
-| `featured` | boolean | Produits mis en avant (homepage) |
-| `category` | string  | Filtre par catégorie             |
-| `search`   | string  | Recherche textuelle              |
-
----
-
-## Logique commande WhatsApp
-
-Aucun formulaire, aucun backend impliqué. Le bouton "Commander" construit une URL `wa.me` avec un message pré-rempli :
-
-```
-Bonjour, je voudrais commander :
-
-🛍️ *Converse All Star*
-Couleur : Noir
-Taille : 41
-Prix : 25 000 FCFA
-
-Merci !
-```
-
-Le vendeur reçoit ce message sur WhatsApp et gère la suite manuellement.
-
----
-
-## Points d'attention
-
-**`status` case-sensitive** : le backend doit renvoyer `"active"` en minuscules. Si ce n'est pas le cas, normaliser dans `lib/api.ts` :
-
-```ts
-if (data) data.status = data.status.toLowerCase();
-```
-
-**Params asynchrones** : Next.js 15 rend les `params` asynchrones. Toujours utiliser `const { slug } = await params`.
-
-**Deux fetches séparés** : `layout.tsx` et `page.tsx` fetchent le store indépendamment. Next.js déduplique les requêtes identiques via le cache (`revalidate: 60`), donc pas de double appel réseau en pratique.
-
----
-
 ## Prochaines étapes
 
-- [ ] Résoudre le bug `status` case-sensitive (voir section ci-dessus)
 - [ ] Ajouter `not-found.tsx` personnalisé par boutique
 - [ ] Thème 2 — `bold` (fond sombre, typographie large)
-- [ ] Open Graph dynamique par produit (partage WhatsApp/Facebook)
-- [ ] Page confirmation post-commande (optionnel)
