@@ -53,7 +53,7 @@ export default function Footer({ store }: FooterProps) {
                 className="hover:underline"
                 style={{ color: primaryColor }}
               >
-                Kernel
+                Kernelaap
               </a>
             </p>
           </div>

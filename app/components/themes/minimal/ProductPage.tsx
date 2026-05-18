@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+
 import {
   Product,
   ProductVariant,
@@ -10,9 +11,9 @@ import {
   getAvailableStock,
   isVariantAvailable,
   getVariantPrice,
-  formatPrice,
-} from "../../../types/product";
-import { StoreData, buildWhatsAppUrl } from "../../../types/store";
+} from "@/app/types/product";
+import { StoreData, buildWhatsAppUrl } from "@/app/types/store";
+import { formatPrice } from "@/app/lib/utils";
 
 interface ProductPageProps {
   store: StoreData;
@@ -41,27 +42,21 @@ export default function ProductPage({ store, product }: ProductPageProps) {
   const colors = useMemo(
     () =>
       [
-        ...new Set(
-          activeVariants.map((v: ProductVariant) => v.color).filter(Boolean),
-        ),
+        ...new Set(activeVariants.map((v) => v.color).filter(Boolean)),
       ] as string[],
     [activeVariants],
   );
   const sizes = useMemo(
     () =>
       [
-        ...new Set(
-          activeVariants.map((v: ProductVariant) => v.size).filter(Boolean),
-        ),
+        ...new Set(activeVariants.map((v) => v.size).filter(Boolean)),
       ] as string[],
     [activeVariants],
   );
   const materials = useMemo(
     () =>
       [
-        ...new Set(
-          activeVariants.map((v: ProductVariant) => v.material).filter(Boolean),
-        ),
+        ...new Set(activeVariants.map((v) => v.material).filter(Boolean)),
       ] as string[],
     [activeVariants],
   );
@@ -76,11 +71,13 @@ export default function ProductPage({ store, product }: ProductPageProps) {
     materials[0] ?? null,
   );
 
+  const [quantity, setQuantity] = useState(1);
+
   // Variant correspondant à la sélection actuelle
   const matchedVariant = useMemo<ProductVariant | null>(() => {
     if (!activeVariants.length) return null;
     return (
-      activeVariants.find((v: ProductVariant) => {
+      activeVariants.find((v) => {
         const colorOk = !colors.length || v.color === selectedColor;
         const sizeOk = !sizes.length || v.size === selectedSize;
         const materialOk = !materials.length || v.material === selectedMaterial;
@@ -239,7 +236,7 @@ export default function ProductPage({ store, product }: ProductPageProps) {
               <div className="flex flex-wrap gap-2">
                 {colors.map((color) => {
                   const variantForColor = activeVariants.find(
-                    (v: ProductVariant) => v.color === color,
+                    (v) => v.color === color,
                   );
                   const available = variantForColor
                     ? isVariantAvailable(variantForColor)
@@ -290,7 +287,7 @@ export default function ProductPage({ store, product }: ProductPageProps) {
               <div className="flex flex-wrap gap-2">
                 {sizes.map((size) => {
                   const variantForSize = activeVariants.find(
-                    (v: ProductVariant) =>
+                    (v) =>
                       v.size === size &&
                       (!selectedColor || v.color === selectedColor),
                   );
@@ -377,22 +374,47 @@ export default function ProductPage({ store, product }: ProductPageProps) {
             </p>
           )}
 
-          {/* ── CTA WhatsApp ── */}
-          <div className="pt-2">
-            {store.whatsappNumber && canOrder ? (
-              <a
-                href={buildWhatsAppUrl(
-                  store.whatsappNumber,
-                  buildWhatsAppMessage(),
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2.5 w-full py-3.5 rounded-xl text-sm font-medium text-white transition-opacity hover:opacity-90"
-                style={{ backgroundColor: "#25D366" }}
+          {/* ── Sélecteur quantité ── */}
+          <div>
+            <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2.5">
+              Quantité
+            </p>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                disabled={quantity <= 1}
+                className="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                <WhatsAppIcon className="w-5 h-5" />
-                Commander via WhatsApp
-              </a>
+                <MinusIcon className="w-4 h-4" />
+              </button>
+              <span className="w-8 text-center text-sm font-medium text-gray-900">
+                {quantity}
+              </span>
+              <button
+                onClick={() => setQuantity((q) => Math.min(stock, q + 1))}
+                disabled={quantity >= stock}
+                className="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                <PlusIcon className="w-4 h-4" />
+              </button>
+              {stock > 0 && (
+                <span className="text-xs text-gray-400 ml-1">
+                  {stock} disponible{stock > 1 ? "s" : ""}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* ── CTA Commander ── */}
+          <div className="pt-2">
+            {canOrder ? (
+              <Link
+                href={`/${store.slug}/commande?productSlug=${product.slug}&variantId=${matchedVariant?.id ?? ""}&quantity=${quantity}`}
+                className="flex items-center justify-center gap-2.5 w-full py-3.5 rounded-xl text-sm font-medium text-white transition-opacity hover:opacity-90"
+                style={{ backgroundColor: primaryColor }}
+              >
+                Commander
+              </Link>
             ) : (
               <button
                 disabled
@@ -430,6 +452,34 @@ export default function ProductPage({ store, product }: ProductPageProps) {
 }
 
 // ── Icons ──
+
+function MinusIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
+    </svg>
+  );
+}
+
+function PlusIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+    </svg>
+  );
+}
 
 function NoImageIcon({ className }: { className?: string }) {
   return (

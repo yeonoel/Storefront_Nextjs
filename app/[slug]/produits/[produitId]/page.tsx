@@ -5,14 +5,14 @@ import ProductPage from "@/app/components/themes/minimal/ProductPage";
 import { getPrimaryImage } from "@/app/types/product";
 
 interface Props {
-  params: Promise<{ slug: string; productId: string }>;
+  params: Promise<{ slug: string; produitId: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug, productId } = await params;
+  const { slug, produitId } = await params;
   const [store, productRes] = await Promise.all([
     fetchStore(slug),
-    fetchProduct(slug, productId),
+    fetchProduct(slug, produitId),
   ]);
 
   if (!store || !productRes?.data) return { title: "Produit introuvable" };
@@ -35,11 +35,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProductRoute({ params }: Props) {
-  const { slug, productId } = await params;
+  const { slug, produitId } = await params;
 
   const [store, productRes] = await Promise.all([
     fetchStore(slug),
-    fetchProduct(slug, productId),
+    fetchProduct(slug, produitId),
   ]);
 
   if (!store || store.isDeleted || store.status !== "active") notFound();

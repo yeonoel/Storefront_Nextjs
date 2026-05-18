@@ -114,33 +114,6 @@ export default function HomePage({ store, featuredProducts }: HomePageProps) {
       </section>
 
       {/* ── BANDEAU WHATSAPP ── */}
-      {store.whatsappNumber && (
-        <section className="bg-gray-50 border-y border-gray-100 py-8 md:py-10">
-          <div className="max-w-6xl mx-auto px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
-            <div>
-              <p className="text-sm md:text-base font-medium text-gray-900">
-                Une question sur un produit ?
-              </p>
-              <p className="text-sm text-gray-500 mt-0.5">
-                On vous répond directement sur WhatsApp.
-              </p>
-            </div>
-            <a
-              href={buildWhatsAppUrl(
-                store.whatsappNumber,
-                `Bonjour, j'ai une question sur votre boutique ${store.name}`,
-              )}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm font-medium text-white px-5 py-2.5 rounded-full flex-shrink-0 transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#25D366" }}
-            >
-              <WhatsAppIcon className="w-4 h-4" />
-              Nous contacter
-            </a>
-          </div>
-        </section>
-      )}
     </div>
   );
 }

@@ -1,3 +1,5 @@
+import { Console } from "console";
+import { CreateOrderPayload, OrderResponse } from "../types/order";
 import { ProductsResponse, ProductDetailResponse } from "../types/product";
 import { StoreData } from "../types/store";
 
@@ -9,8 +11,11 @@ export async function fetchStore(slug: string): Promise<StoreData | null> {
     const res = await fetch(`${API_URL}/stores/store/${slug}`, {
       next: { revalidate: 60 },
     });
-    if (!res.ok) return null;
     const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
+      throw new Error(JSON.stringify(data));
+    }
     return data ?? null;
   } catch {
     return null;
@@ -40,8 +45,11 @@ export async function fetchProducts(
       `${API_URL}/stores/store/${storeSlug}/products?${params.toString()}`,
       { next: { revalidate: 30 } },
     );
-    if (!res.ok) return null;
     const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
+      throw new Error(JSON.stringify(data));
+    }
     return data ?? null;
   } catch {
     return null;
@@ -57,8 +65,34 @@ export async function fetchProduct(
       `${API_URL}/stores/store/${storeSlug}/products/${productSlug}`,
       { next: { revalidate: 30 } },
     );
-    if (!res.ok) return null;
     const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
+      throw new Error(JSON.stringify(data));
+    }
+    return data ?? null;
+  } catch {
+    return null;
+  }
+}
+
+// ── Orders ─────────────────────────────────────────────
+export async function createOrder(
+  storeSlug: string,
+  payload: CreateOrderPayload,
+): Promise<OrderResponse | null> {
+  try {
+    console.log("Creating order with payload:", payload);
+    const res = await fetch(`${API_URL}/orders/create/${storeSlug}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...payload }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data);
+      throw new Error(JSON.stringify(data));
+    }
     return data ?? null;
   } catch {
     return null;

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Product, getPrimaryImage, formatPrice } from "@/app/types/product";
+import { Product, getPrimaryImage } from "@/app/types/product";
+import { formatPrice } from "@/app/lib/utils";
 
 interface ProductCardProps {
   product: Product;

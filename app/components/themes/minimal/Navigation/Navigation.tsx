@@ -85,24 +85,7 @@ export default function Navigation({ store }: NavProps) {
         </nav>
 
         {/* Actions droite */}
-        <div className="flex items-center gap-4">
-          {/* Bouton WhatsApp */}
-          {store.whatsappNumber && (
-            <a
-              href={buildWhatsAppUrl(
-                store.whatsappNumber,
-                `Bonjour, j'ai une question sur votre boutique ${store.name}`,
-              )}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-white px-4 py-2 rounded-full transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#25D366" }}
-            >
-              <WhatsAppIcon className="w-4 h-4" />
-              <span>WhatsApp</span>
-            </a>
-          )}
-        </div>
+        <div className="flex items-center gap-4"></div>
       </header>
 
       {/* ── MOBILE : top bar ── */}
@@ -126,29 +109,6 @@ export default function Navigation({ store }: NavProps) {
             {store.name}
           </span>
         </Link>
-
-        <div className="flex items-center gap-3">
-          {store.whatsappNumber && (
-            <a
-              href={buildWhatsAppUrl(
-                store.whatsappNumber,
-                `Bonjour, j'ai une question sur ${store.name}`,
-              )}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-8 h-8 rounded-full flex items-center justify-center"
-              style={{ backgroundColor: "#25D366" }}
-              aria-label="Contacter sur WhatsApp"
-            >
-              <WhatsAppIcon className="w-4 h-4 text-white" />
-            </a>
-          )}
-          <Link
-            href={`${base}/panier`}
-            className="relative flex items-center justify-center w-8 h-8"
-            aria-label="Panier"
-          ></Link>
-        </div>
       </header>
 
       {/* ── MOBILE : bottom nav ── */}
