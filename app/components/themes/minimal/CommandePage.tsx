@@ -26,8 +26,6 @@ export default function CommandePage({ store, item }: CommandePageProps) {
   const primaryColor = store?.primaryColor || "#1A1A1A";
   const base = `/${store?.slug}`;
 
-  console.log("CommandePage render", { item });
-
   const [form, setForm] = useState({
     name: "",
     phone: "",

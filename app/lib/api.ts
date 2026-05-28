@@ -1,4 +1,3 @@
-import { Console } from "console";
 import { CreateOrderPayload, OrderResponse } from "../types/order";
 import { ProductsResponse, ProductDetailResponse } from "../types/product";
 import { StoreData } from "../types/store";
@@ -13,7 +12,6 @@ export async function fetchStore(slug: string): Promise<StoreData | null> {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       throw new Error(JSON.stringify(data));
     }
     return data ?? null;
@@ -47,7 +45,6 @@ export async function fetchProducts(
     );
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       throw new Error(JSON.stringify(data));
     }
     return data ?? null;
@@ -67,7 +64,6 @@ export async function fetchProduct(
     );
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       throw new Error(JSON.stringify(data));
     }
     return data ?? null;
@@ -82,7 +78,6 @@ export async function createOrder(
   payload: CreateOrderPayload,
 ): Promise<OrderResponse | null> {
   try {
-    console.log("Creating order with payload:", payload);
     const res = await fetch(`${API_URL}/orders/create/${storeSlug}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -90,7 +85,6 @@ export async function createOrder(
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data);
       throw new Error(JSON.stringify(data));
     }
     return data ?? null;

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import Link from "next/link";
 import { StoreData } from "@/app/types/store";
 import { Product } from "@/app/types/product";
 import ProductCard from "../../shared/ProductCard";
@@ -49,7 +48,10 @@ export default function CataloguePage({ store, products }: CataloguePageProps) {
     <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 md:py-10">
       {/* ── EN-TÊTE ── */}
       <div className="mb-6">
-        <h1 className="text-lg md:text-xl font-medium text-gray-900">
+        <h1
+          className="text-lg md:text-xl font-medium"
+          style={{ color: "var(--color-on-primary)" }}
+        >
           Catalogue
         </h1>
         <p className="text-sm text-gray-400 mt-0.5">
@@ -65,7 +67,7 @@ export default function CataloguePage({ store, products }: CataloguePageProps) {
           placeholder="Rechercher un produit..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-9 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-gray-400 transition-colors"
+          className="w-full pl-9 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-gray-400 transition-colors text-gray-900"
         />
         {search && (
           <button
@@ -145,7 +147,7 @@ function FilterChip({
         active
           ? {
               backgroundColor: primaryColor,
-              color: "white",
+              color: "var(--color-on-primary)",
               borderColor: primaryColor,
             }
           : {

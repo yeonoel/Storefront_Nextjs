@@ -3,7 +3,6 @@ import {
   StoreData,
   getStoreInitials,
   getStoreTagline,
-  buildWhatsAppUrl,
 } from "@/app/types/store";
 import { Product } from "@/app/types/product";
 import ProductCard from "@/app/components/shared/ProductCard";
@@ -74,7 +73,10 @@ export default function HomePage({ store, featuredProducts }: HomePageProps) {
           <Link
             href={`${base}/produits`}
             className="inline-flex items-center gap-2 text-sm font-medium px-6 py-3 rounded-full transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "white", color: primaryColor }}
+            style={{
+              backgroundColor: primaryColor,
+              color: "var(--color-on-primary)",
+            }}
           >
             Voir la collection
             <ArrowRightIcon className="w-4 h-4" />
@@ -85,13 +87,16 @@ export default function HomePage({ store, featuredProducts }: HomePageProps) {
       {/* ── PRODUITS VEDETTES ── */}
       <section className="max-w-6xl mx-auto px-4 md:px-8 py-10 md:py-14">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-base md:text-lg font-medium text-gray-900">
+          <h2
+            className="text-base md:text-lg font-medium"
+            style={{ color: "var(--color-on-primary)" }}
+          >
             {featuredProducts.length > 0 ? "Nouveautés" : "Nos produits"}
           </h2>
           <Link
             href={`${base}/produits`}
             className="text-sm transition-colors hover:opacity-80"
-            style={{ color: primaryColor }}
+            style={{ color: "var(--color-on-primary)" }}
           >
             Tout voir →
           </Link>
@@ -131,7 +136,10 @@ function EmptyProducts({
         className="w-14 h-14 rounded-full flex items-center justify-center mb-4"
         style={{ backgroundColor: `${primaryColor}15` }}
       >
-        <BoxIcon className="w-6 h-6" style={{ color: primaryColor }} />
+        <BoxIcon
+          className="w-6 h-6"
+          style={{ color: "var(--color-on-primary)" }}
+        />
       </div>
       <p className="text-gray-500 text-sm max-w-xs">
         Aucun produit pour le moment. Revenez bientôt !

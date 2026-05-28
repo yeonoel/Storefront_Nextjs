@@ -12,7 +12,7 @@ import {
   isVariantAvailable,
   getVariantPrice,
 } from "@/app/types/product";
-import { StoreData, buildWhatsAppUrl } from "@/app/types/store";
+import { StoreData } from "@/app/types/store";
 import { formatPrice } from "@/app/lib/utils";
 
 interface ProductPageProps {
@@ -107,22 +107,6 @@ export default function ProductPage({ store, product }: ProductPageProps) {
   const isLowStock =
     isAvailable && stock > 0 && stock <= (product.lowStockThreshold ?? 5);
 
-  // Construction du message WhatsApp
-  function buildWhatsAppMessage(): string {
-    const lines = [
-      `Bonjour, je voudrais commander :`,
-      ``,
-      `🛍️ *${product.name}*`,
-    ];
-    if (selectedColor) lines.push(`Couleur : ${selectedColor}`);
-    if (selectedSize) lines.push(`Taille : ${selectedSize}`);
-    if (selectedMaterial) lines.push(`Matière : ${selectedMaterial}`);
-    lines.push(`Prix : ${formatPrice(currentPrice)}`);
-    lines.push(``);
-    lines.push(`Merci !`);
-    return lines.join("\n");
-  }
-
   const hasVariants =
     colors.length > 0 || sizes.length > 0 || materials.length > 0;
   const canOrder = !hasVariants || (isAvailable && !!matchedVariant);
@@ -202,18 +186,24 @@ export default function ProductPage({ store, product }: ProductPageProps) {
         <div className="flex flex-col gap-5">
           {/* Nom + Prix */}
           <div>
-            <h1 className="text-xl md:text-2xl font-medium text-gray-900 leading-snug">
+            <h1
+              className="text-xl md:text-2xl font-medium leading-snug"
+              style={{ color: "var(--color-on-primary)" }}
+            >
               {product.name}
             </h1>
             <div className="flex items-center gap-3 mt-2">
               <span
                 className="text-2xl font-medium"
-                style={{ color: primaryColor }}
+                style={{ color: "var(--color-on-primary)" }}
               >
                 {formatPrice(currentPrice)}
               </span>
               {product.compareAtPrice && (
-                <span className="text-base text-gray-400 line-through">
+                <span
+                  className="text-base line-through"
+                  style={{ color: "var(--color-on-primary)" }}
+                >
                   {formatPrice(product.compareAtPrice)}
                 </span>
               )}
@@ -252,18 +242,18 @@ export default function ProductPage({ store, product }: ProductPageProps) {
                           ? {
                               backgroundColor: primaryColor,
                               borderColor: primaryColor,
-                              color: "white",
+                              color: "var(--color-on-primary)",
                             }
                           : available
                             ? {
-                                backgroundColor: "white",
+                                backgroundColor: primaryColor,
                                 borderColor: "#e5e7eb",
-                                color: "#374151",
+                                color: "var(--color-on-primary)",
                               }
                             : {
-                                backgroundColor: "#f9fafb",
+                                backgroundColor: primaryColor,
                                 borderColor: "#e5e7eb",
-                                color: "#d1d5db",
+                                color: "var(--color-on-primary)",
                               }
                       }
                     >
@@ -305,18 +295,18 @@ export default function ProductPage({ store, product }: ProductPageProps) {
                           ? {
                               backgroundColor: primaryColor,
                               borderColor: primaryColor,
-                              color: "white",
+                              color: "var(--color-on-primary)",
                             }
                           : available
                             ? {
-                                backgroundColor: "white",
+                                backgroundColor: primaryColor,
                                 borderColor: "#e5e7eb",
-                                color: "#374151",
+                                color: "var(--color-on-primary)",
                               }
                             : {
                                 backgroundColor: "#f9fafb",
                                 borderColor: "#f3f4f6",
-                                color: "#d1d5db",
+                                color: "var(--color-on-primary)",
                                 textDecoration: "line-through",
                               }
                       }
@@ -346,12 +336,12 @@ export default function ProductPage({ store, product }: ProductPageProps) {
                         ? {
                             backgroundColor: primaryColor,
                             borderColor: primaryColor,
-                            color: "white",
+                            color: "var(--color-on-primary)",
                           }
                         : {
-                            backgroundColor: "white",
+                            backgroundColor: primaryColor,
                             borderColor: "#e5e7eb",
-                            color: "#374151",
+                            color: "var(--color-on-primary)",
                           }
                     }
                   >
@@ -383,17 +373,22 @@ export default function ProductPage({ store, product }: ProductPageProps) {
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                 disabled={quantity <= 1}
-                className="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                className="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                style={{ color: "var(--color-on-primary)" }}
               >
                 <MinusIcon className="w-4 h-4" />
               </button>
-              <span className="w-8 text-center text-sm font-medium text-gray-900">
+              <span
+                className="w-8 text-center text-sm font-medium"
+                style={{ color: "var(--color-on-primary)" }}
+              >
                 {quantity}
               </span>
               <button
                 onClick={() => setQuantity((q) => Math.min(stock, q + 1))}
                 disabled={quantity >= stock}
-                className="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                className="w-10 h-10 rounded-xl border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                style={{ color: "var(--color-on-primary)" }}
               >
                 <PlusIcon className="w-4 h-4" />
               </button>

@@ -15,7 +15,6 @@ interface Props {
 export default async function CommandeRoute({ params, searchParams }: Props) {
   const { slug } = await params;
   const { productSlug, variantId, quantity } = await searchParams;
-
   if (!productSlug || !variantId) notFound();
 
   const [store, productRes] = await Promise.all([

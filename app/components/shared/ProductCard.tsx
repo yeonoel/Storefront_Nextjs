@@ -62,7 +62,10 @@ export default function ProductCard({
 
       {/* Infos */}
       <div className="space-y-1">
-        <p className="text-sm text-gray-900 font-medium leading-snug line-clamp-2">
+        <p
+          className="text-sm  font-medium leading-snug line-clamp-2"
+          style={{ color: "var(--color-on-primary)" }}
+        >
           {product.name}
         </p>
 
@@ -82,7 +85,10 @@ export default function ProductCard({
 
         {/* Prix */}
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium" style={{ color: primaryColor }}>
+          <span
+            className="text-sm font-medium"
+            style={{ color: "var(--color-on-primary)" }}
+          >
             {formatPrice(product.price)}
           </span>
           {product.compareAtPrice && (
